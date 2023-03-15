@@ -32,6 +32,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
+    "yarn:install": "yarn --silent",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
