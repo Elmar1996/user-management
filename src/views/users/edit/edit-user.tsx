@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { User, editUser } from "redux/user-slice";
 import browserHistory from "utils/browser-utils";
 import { useParams } from 'react-router';
+import { useNotifications } from "redux/NotificationsContext";
+import {useUservalidationSchema} from './validationSchema'
 
 
 
@@ -65,6 +67,8 @@ export const EditUser: React.FC = () => {
     const user = users.find(user => user.id == id)
     const dispatch = useDispatch()
     const {name,email,username,phone} = user as User
+    const {notify} = useNotifications()
+    
     const initialValues = {
         name,
         username,
@@ -74,14 +78,15 @@ export const EditUser: React.FC = () => {
     };
     const editUserData = (data) => {
         dispatch(editUser(data))
+        notify({ message: "User updated successfully", type: "success" });
         browserHistory.push("/users")
     }
   return (
     <Root>
-      <Page title="Edit category">
-        <ManagerPageHeader title="Edit category" center />
+      <Page title="Edit user">
+        <ManagerPageHeader title="Edit user" center />
 
-        <Formik initialValues={initialValues} onSubmit={editUserData}>
+        <Formik initialValues={initialValues} onSubmit={editUserData} validationSchema={useUservalidationSchema}>
           {() => (
             <Card className="card">
               <Form>
@@ -89,7 +94,7 @@ export const EditUser: React.FC = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       variant="outlined"
-                      label="categoryName"
+                      label="Name"
                       component={TextField}
                       name="name"
                     />
@@ -97,7 +102,7 @@ export const EditUser: React.FC = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       variant="outlined"
-                      label="categoryName"
+                      label="Username"
                       component={TextField}
                       name="username"
                     />
@@ -105,7 +110,7 @@ export const EditUser: React.FC = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       variant="outlined"
-                      label="categoryName"
+                      label="Email"
                       component={TextField}
                       name="email"
                     />
@@ -113,7 +118,7 @@ export const EditUser: React.FC = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       variant="outlined"
-                      label="categoryName"
+                      label="Phone number"
                       component={TextField}
                       name="phone"
                     />
@@ -126,10 +131,10 @@ export const EditUser: React.FC = () => {
                     onClick={() => browserHistory.goBack()}
                     sx={{ ml: 2 }}
                   >
-                    cancel
+                    Cancel
                   </Button>
                   <Button variant="contained" type="submit" sx={{ ml: 2 }}>
-                    save
+                    Update
                   </Button>
                 </Box>
               </Form>

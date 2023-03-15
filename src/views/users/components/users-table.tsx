@@ -115,16 +115,13 @@ export const UsersTable: React.FC = () => {
               <TableCell>
                 <Checkbox
                   color="primary"
-                  // checked={
-                  //     users && users?.length > 0 && selected.length === users?.length
-                  // }
                   onChange={handleSelectAllClick}
                 />
               </TableCell>
-              <TableCell>name</TableCell>
-              <TableCell>username</TableCell>
-              <TableCell>email</TableCell>
-              <TableCell>phone </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Username</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Phone number </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

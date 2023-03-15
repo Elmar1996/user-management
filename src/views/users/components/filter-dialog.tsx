@@ -44,7 +44,7 @@ export const FilterDialog: React.FC<FilterDialogProps> = ({ filterDialogOpen, on
             </IconButton>
             <Box sx={{ py: 4, px: 6 }}>
                 <Typography sx={{ textAlign: 'center', mb: 4 }} variant="h3">
-                storeFilter 
+                  User filter
                 </Typography>
                 <Formik
                     initialValues={filters}

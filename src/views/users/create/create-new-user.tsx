@@ -1,12 +1,20 @@
-import { Box, Button, Card, Container, Grid, Theme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Grid, Theme
+} from "@mui/material";
 import { styled } from "@mui/styles";
 import axios from "axios";
 import { ManagerPageHeader, Page } from "components";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-mui";
 import { useDispatch, useSelector } from "react-redux";
+import { useNotifications } from "redux/NotificationsContext";
 import { addUser, User } from "redux/user-slice";
 import browserHistory from "utils/browser-utils";
+import {useUservalidationSchema} from './validationSchema'
 
 const Root = styled(Container)(({ theme }: { theme: Theme }) => ({
   "& .card": {
@@ -63,30 +71,31 @@ const Root = styled(Container)(({ theme }: { theme: Theme }) => ({
 
 export const CreateNewUser: React.FC = () => {
   const users = useSelector((state: { users: User[] }) => state.users);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const initialValues = {
     name: "",
     username: "",
     email: "",
     phone: "",
   };
-
+  const { notify } = useNotifications();
   const postUser = async (data) => {
     const { data: userData } = await axios.post(
       "https://jsonplaceholder.typicode.com/users",
       data
     );
-   
+
     const newData = { ...userData, id: users.length + 1 };
-    dispatch(addUser(newData))
-    browserHistory.push("/users")
+    dispatch(addUser(newData));
+    notify({ message: "User created successfully", type: "success" });
+    browserHistory.push("/users");
   };
 
   return (
     <Root>
-      <Page title="newsCategory">
-        <ManagerPageHeader title="newsCategory" center />
-        <Formik initialValues={initialValues} onSubmit={postUser}>
+      <Page title="Add user">
+        <ManagerPageHeader title="Add user" center />
+        <Formik initialValues={initialValues} validationSchema={useUservalidationSchema} onSubmit={postUser}>
           {() => (
             <Card className="card">
               <Form>
@@ -94,7 +103,7 @@ export const CreateNewUser: React.FC = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       variant="outlined"
-                      label="categoryName"
+                      label="Name"
                       component={TextField}
                       name="name"
                     />
@@ -102,7 +111,7 @@ export const CreateNewUser: React.FC = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       variant="outlined"
-                      label="categoryName"
+                      label="Username"
                       component={TextField}
                       name="username"
                     />
@@ -110,7 +119,7 @@ export const CreateNewUser: React.FC = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       variant="outlined"
-                      label="categoryName"
+                      label="Email"
                       component={TextField}
                       name="email"
                     />
@@ -118,7 +127,7 @@ export const CreateNewUser: React.FC = () => {
                   <Grid item xs={12} md={6}>
                     <Field
                       variant="outlined"
-                      label="categoryName"
+                      label="Phone number"
                       component={TextField}
                       name="phone"
                     />
@@ -131,10 +140,10 @@ export const CreateNewUser: React.FC = () => {
                     onClick={() => browserHistory.goBack()}
                     sx={{ ml: 2 }}
                   >
-                    cancel
+                    Cancel
                   </Button>
                   <Button variant="contained" type="submit" sx={{ ml: 2 }}>
-                    save
+                    Save
                   </Button>
                 </Box>
               </Form>

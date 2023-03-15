@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { deleteUser } from "redux/user-slice";
 import browserHistory from "utils/browser-utils";
 import { ReactComponent as FilterIcon } from "assets/icons/filter.svg";
+import { useNotifications } from "redux/NotificationsContext";
 
 type CategoriesActionsProps = {
   categorySelected: boolean;
@@ -52,29 +53,38 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const dispatch = useDispatch();
+  const { confirm, notify } = useNotifications();
   return (
     <Root>
-      <Page title="dvmkdvmk">
-        <ManagerPageHeader title="svsvsv">
+      <Page title="Users">
+        <ManagerPageHeader title="Users">
           {isMobile ? (
             <>
               {categorySelected && (
-                <Tooltip title="delete" arrow>
+                <Tooltip title="Delete" arrow>
                   <IconButton
-                    sx={{ color: "error.light", ml: 3 }}
-                    // onClick={(e) => {
-                    //     e.preventDefault();
-                    //     deleteCategory({ variables: { deleteCategoryId: selectedId } });
-                    //     setSelected((state) => state.filter((id) => id !== selectedId));
-                    // }}
-                    onClick={() => dispatch(deleteUser({ ids: selected }))}
+                    sx={{ color: "error.light", ml: 3 }}        
+                    onClick={() =>
+                      confirm({
+                        onConfirm() {
+                          dispatch(deleteUser({ ids: selected }));
+                          setSelected([]);
+                          notify({
+                            message: "User Deleted Successfully",
+                            type: "success",
+                          });
+                        },
+                        confirmText: "Are you sure?",
+                        description: "Selected users will be deleted",
+                      })
+                    }
                   >
                     <TrashIcon />
                   </IconButton>
                 </Tooltip>
               )}
               {showEditButton && (
-                <Tooltip title="edit" arrow>
+                <Tooltip title="Edit" arrow>
                   <Link to={`/users/edit/${selectedId}`}>
                     <IconButton sx={{ ml: 3 }}>
                       <EditIcon />
@@ -82,12 +92,12 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
                   </Link>
                 </Tooltip>
               )}
-              <Tooltip title="filter" arrow>
+              <Tooltip title="Filter" arrow>
                 <IconButton sx={{ ml: 3 }} onClick={openFilterDialog}>
                   <FilterIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="newCategory" arrow>
+              <Tooltip title="+ Add user" arrow>
                 <IconButton
                   sx={{ ml: 3 }}
                   onClick={() => browserHistory.push("/users/create")}
@@ -101,20 +111,29 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
               {categorySelected && (
                 <Button
                   startIcon={<TrashIcon />}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    dispatch(deleteUser({ ids: selected }));
-                    setSelected([]);
-                  }}
+                  onClick={() =>
+                    confirm({
+                      onConfirm() {
+                        dispatch(deleteUser({ ids: selected }));
+                        setSelected([]);
+                        notify({
+                          message: "User Deleted Successfully",
+                          type: "success",
+                        });
+                      },
+                      confirmText: "Are you sure?",
+                      description: "Selected users will be deleted",
+                    })
+                  }
                   className={clsx("button", "delete-button")}
                 >
-                  delete
+                  Delete
                 </Button>
               )}
               {showEditButton && (
                 <Link to={`/users/edit/${selectedId}`}>
                   <Button startIcon={<EditIcon />} className="button">
-                    Redaktə et
+                    Edit
                   </Button>
                 </Link>
               )}
@@ -123,15 +142,11 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
                 className="button"
                 onClick={openFilterDialog}
               >
-                 filter
+                Filter
               </Button>
               <Link to={"/users/create"}>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  sx={{ ml: 3 }}
-                >
-                  newCategory
+                <Button color="secondary" variant="contained" sx={{ ml: 3 }}>
+                  + Add user
                 </Button>
               </Link>
             </>
