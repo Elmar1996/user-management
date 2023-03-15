@@ -36,10 +36,10 @@ const Root = styled('div')(({ theme,collapsed }: { theme: Theme,collapsed:boolea
 }));
 
 const App: React.FC = () => {
-    const [collapsed, setCollapsed] = useState<boolean>(true);
+    const [collapsed, setCollapsed] = useState<boolean>(false);
     return (
         <Root collapsed={collapsed}>
-            <Sidebar collapsed={collapsed}  setCollapsed={setCollapsed}/>
+            <Sidebar collapsed={collapsed} setCollapsed={setCollapsed}/>
             <CssBaseline />
             <Header collapsed={collapsed} />
             <div className="main-wrapper">

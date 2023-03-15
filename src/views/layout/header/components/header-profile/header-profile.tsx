@@ -50,13 +50,11 @@ const Root = styled(Box)(({ theme, collapsed }: { theme: Theme; collapsed: boole
 }));
 
 
-export const HeaderProfile: React.FC<{ collapsed: boolean; userClassName?: string } & BoxProps> = ({
-    collapsed,
-}) => {
+export const HeaderProfile: React.FC<{ collapsed: boolean; userClassName?: string } & BoxProps> = () => {
 
     return (
         <>
-            <Root theme={useTheme()} collapsed={collapsed} >
+            <Root theme={useTheme()} >
                 <Box sx={{ display: 'flex'}}>
                     <Typography fontWeight="600" fontSize="0.875rem">
                        Super Admin

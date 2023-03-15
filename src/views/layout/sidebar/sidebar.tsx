@@ -3,6 +3,7 @@ import { Box, ButtonBase, Drawer as MuiDrawer, useMediaQuery, useTheme } from '@
 import { Theme } from '@mui/material/styles';
 import { styled } from '@mui/styles';
 import logo from "assets/icons/logo.png";
+import minLogo from "assets/icons/min-logo.png";
 import { Link } from 'components';
 import { Dispatch, SetStateAction } from 'react';
 import { collapsedSidebarWidth, sidebarWidth } from '../config';
@@ -43,11 +44,11 @@ const Drawer = styled(MuiDrawer)(
         managerSidebarCollapsed: boolean;
         isMobile: boolean;
     }) => ({
-        width: !isMobile && managerSidebarCollapsed ? collapsedSidebarWidth : sidebarWidth,
+        width:  managerSidebarCollapsed ? collapsedSidebarWidth : sidebarWidth,
         '& .MuiDrawer-paper': {
             transition: isMobile ? 'none' : 'all .2s',
             borderRight: 'none',
-            width: !isMobile && managerSidebarCollapsed ? collapsedSidebarWidth : sidebarWidth,
+            width: managerSidebarCollapsed ? collapsedSidebarWidth : sidebarWidth,
         },
         '& .dashboard-menu': {
             '&::-webkit-scrollbar': {
@@ -93,19 +94,19 @@ export const Sidebar: React.FC<{collapsed:boolean;setCollapsed:Dispatch<SetState
     return (
         <Root managerSidebarCollapsed={collapsed}>
             <Drawer
-                variant={isMobile ? undefined : 'permanent'}
+                variant={ 'permanent'}
                 anchor="left"
                 open={collapsed}
-                onClose={() => isMobile && setCollapsed(true)}
-                managerSidebarCollapsed={collapsed}
+                onClose={() =>  setCollapsed(true)}
+                managerSidebarCollapsed={!isMobile && collapsed}
                 isMobile={isMobile}
             >
                 <Box className="dashboard-menu">
                     <Link to="/" className="logo">
                         {collapsed ? (
-                            <img src={logo} alt="falkon logo" />
+                            <img style={{width:"70px", height:"70px"}} src={minLogo} alt="bestcomp logo" />
                         ) : (
-                            <img src={logo} alt="falkon logo" />
+                            <img src={logo} alt="bestcomp logo" />
                         )}
                     </Link>
 

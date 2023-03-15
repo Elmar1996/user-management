@@ -16,12 +16,15 @@ import { Link, ManagerPageHeader, Page } from "components";
 import { useDispatch } from "react-redux";
 import { deleteUser } from "redux/user-slice";
 import browserHistory from "utils/browser-utils";
+import { ReactComponent as FilterIcon } from "assets/icons/filter.svg";
 
 type CategoriesActionsProps = {
   categorySelected: boolean;
   showEditButton: boolean;
   selectedId: string;
   setSelected: (string) => void;
+  selected: string[];
+  openFilterDialog: () => void;
 };
 
 const Root = styled(Box)(({ theme }: { theme: Theme }) => ({
@@ -42,11 +45,13 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
   categorySelected,
   showEditButton,
   selectedId,
-  setSelected
+  setSelected,
+  openFilterDialog,
+  selected,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-    const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
     <Root>
       <Page title="dvmkdvmk">
@@ -62,7 +67,7 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
                     //     deleteCategory({ variables: { deleteCategoryId: selectedId } });
                     //     setSelected((state) => state.filter((id) => id !== selectedId));
                     // }}
-                    onClick={() => dispatch(deleteUser({id:selectedId}))}
+                    onClick={() => dispatch(deleteUser({ ids: selected }))}
                   >
                     <TrashIcon />
                   </IconButton>
@@ -77,6 +82,11 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
                   </Link>
                 </Tooltip>
               )}
+              <Tooltip title="filter" arrow>
+                <IconButton sx={{ ml: 3 }} onClick={openFilterDialog}>
+                  <FilterIcon />
+                </IconButton>
+              </Tooltip>
               <Tooltip title="newCategory" arrow>
                 <IconButton
                   sx={{ ml: 3 }}
@@ -92,12 +102,11 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
                 <Button
                   startIcon={<TrashIcon />}
                   onClick={(e) => {
-                      e.preventDefault();
-                      dispatch(deleteUser({id:selectedId}))
-                      setSelected([])
+                    e.preventDefault();
+                    dispatch(deleteUser({ ids: selected }));
+                    setSelected([]);
                   }}
                   className={clsx("button", "delete-button")}
-                
                 >
                   delete
                 </Button>
@@ -109,12 +118,18 @@ export const UsersActions: React.FC<CategoriesActionsProps> = ({
                   </Button>
                 </Link>
               )}
+              <Button
+                startIcon={<FilterIcon />}
+                className="button"
+                onClick={openFilterDialog}
+              >
+                 filter
+              </Button>
               <Link to={"/users/create"}>
                 <Button
                   color="secondary"
                   variant="contained"
                   sx={{ ml: 3 }}
-                  href=""
                 >
                   newCategory
                 </Button>

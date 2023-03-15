@@ -99,6 +99,7 @@ const theme = createTheme({
                             },
                         },
                         '& .MuiTableRow-root': {
+                            padding:"10px",
                             '&:last-child': {
                                 '& td': {
                                     border: 0,

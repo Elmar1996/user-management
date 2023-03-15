@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
@@ -17,9 +17,12 @@ const Routes: React.FC = () => {
               axios.get(`https://jsonplaceholder.typicode.com/users`,),
          
       );
-    if(!users.length){
-      dispatch(initializeUsers(data?.data));
-    }
+      useEffect(() => {
+        if(!users.length){
+            dispatch(initializeUsers(data?.data));
+          }
+      },[data])
+    
     return (
         <Router history={browserHistory}>
             <Suspense fallback={<></>}>
