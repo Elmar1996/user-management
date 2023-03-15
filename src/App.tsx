@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import AdapterLuxon from "@mui/lab/AdapterLuxon";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import CssBaseline from "@mui/material/CssBaseline";
+import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
+import { useEffect } from "react";
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Provider } from "react-redux";
+import store from "redux/store";
+import Routes from "routes";
+import smoothscroll from "smoothscroll-polyfill";
+import theme from "theme";
 
-function App() {
+
+const App: React.FC = () => {
+  const queryClient = new QueryClient();
+ 
+  useEffect(() => {
+    smoothscroll.polyfill();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <LocalizationProvider dateAdapter={AdapterLuxon}>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <CssBaseline />
+            <Routes />
+          </QueryClientProvider>
+          </Provider>
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </LocalizationProvider>
   );
-}
+};
 
 export default App;
