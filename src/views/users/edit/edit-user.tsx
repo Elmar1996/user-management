@@ -66,7 +66,7 @@ export const EditUser: React.FC = () => {
     const users = useSelector((state: { users: User[] }) => state.users);
     const user = users.find(user => user.id == id)
     const dispatch = useDispatch()
-    const {name,email,username,phone} = user as User
+    const {name,email,username,phone} = user as User || {}
     const {notify} = useNotifications()
     
     const initialValues = {
